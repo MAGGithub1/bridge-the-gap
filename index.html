@@ -1,13 +1,25 @@
 <html>
-  <head>
-    <title>Bridge the Gap</title>
-    <style>
-    </style>
-    <script src="/socket.io/socket.io.js"></script>
-  </head>
-  <body>
-    <canvas id="canvas"></canvas>
-  </body>
-  Press a key and check the console.
-  <script src="/static/game.js"></script>
+
+<head>
+  <title>Bridge the Gap</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+    integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  <link rel="stylesheet" type="text/css" href="index.css">
+  <script src="/socket.io/socket.io.js"></script>
+</head>
+
+<body>
+  <div class="container" >
+    <!-- centres the buttons horizontally and vertically -->
+    <div class="page-hero d-flex align-items-center justify-content-center" style="height: 100%;">
+      <div class="btn-toolbar btn-group-vertical">
+        <button class="btn button_large" onclick="createLobby('sample data');">Create game</button>
+        <button class="btn button_large" onclick="joinLobby('sample data');">Join game</button>
+      </div>
+    </div>
+  </div>
+
+</body>
+<script src="/static/game.js"></script>
+
 </html>

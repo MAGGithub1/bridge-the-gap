@@ -1,0 +1,19 @@
+.button_large {
+    background-color: green; 
+    border: 3px solid darkgreen;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    font-size: 52px;
+  }
+
+.button_large:hover {
+    background-color: darkgreen
+}
+
+
+
+p {
+    color: aqua;
+}
