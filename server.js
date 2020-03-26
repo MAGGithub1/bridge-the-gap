@@ -29,42 +29,43 @@ server.listen(5000, function () {
   console.log('Starting server on port 5000');
 });
 
-// lobby names are defined by the users
-
-lobbies_open = {};    // lobbies that can currently be joined
-lobbies_closed = {};  // lobbies that cannot be joined
+// lobby names are defined by users
+lobbies = {};
 
 // handle socket.io connections
 io.on('connection', function (socket) {
-  // for testing
-  socket.on('keydown req', function (data) {
-    res = 'player ' + socket.id + ' pressed key ' + data;
-    io.sockets.emit('keydown res', res);
-  });
 
   // creation of a new lobby
   socket.on('new lobby', function (name) {
-    // todo check the lobby with name = name does not exist
+    // err check - does the lobby already exist?
+    if (name in lobbies) {
+      io.to(socket.id).emit('failed to join lobby', { lobby_name: name, err: "A lobby with this name already exists. Please choose a different name." });
+      return;
+    }
 
     // if it does exist, add lobby and player
 
-    lobbies_open[name] = [socket.id];
+    lobbies[name] = { admin: socket.id, players: [], can_join: true };
 
-    // send the updated list of available lobbies to everyone
-    io.sockets.emit('new lobby available', Object.keys(lobbies_open));
-
-    // let the client know they have joined the lobby
-    socket.broadcast.to(socket.id).emit('joined lobby', { lobby_name: name, admin: true });
+    // let the client know they have joined the lobby as the admin
+    io.to(socket.id).emit('joined lobby', { lobby_name: name, admin: true });
   });
 
+  // join an existing lobby
   socket.on('join lobby', function (name) {
-    // todo check the lobby with name = name exists
+    // todo check if a player is already in the lobby? disconnect/reconnect issue?
+
+    // err check - does the lobby exist?
+    if (!(name in lobbies)) {
+      io.to(socket.id).emit('failed to join lobby', { lobby_name: name, err: "This lobby does not exist!" });
+      return;
+    } 
 
     // if it does exist, add lobby and player
-    lobbies_open[name].push(socket.id);
+    lobbies[name]['players'].push(socket.id);
 
     // let the client know they have joined the lobby
-    socket.broadcast.to(socket.id).emit('joined lobby', { lobby_name: name, admin: false });
+    io.to(socket.id).emit('joined lobby', { lobby_name: name, admin: false });
 
   });
 });
